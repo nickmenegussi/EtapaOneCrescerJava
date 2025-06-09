@@ -82,28 +82,76 @@ Controle pedidos em restaurante com pratos principais e sobremesas, aplicando re
 
 ## Exemplos de Testes (Resumo)
 
-- Mercado de Basquete:
+# 🧠 Exercícios de Fixação — POO (Herança, Polimorfismo, Encapsulamento e Composição)
+
+Este repositório contém três exercícios de fixação para praticar os conceitos de **POO**, com foco em herança, polimorfismo, encapsulamento e composição.
+
+## 📦 Exercícios
+
+---
+
+### 🏀 Exercício 1 — Mercado de Basquete
+
+Simula o mercado de transferências da NBA com base em reputação, salário e estatísticas do jogador.
+
+#### Classes principais:
+- `JogadorBasquete` (classe base)
+- Tipos de jogador: `Armador`, `Ala`, `Pivô`
+- `TimeBasquete`
+- `NegociacaoBasquete`
+
+#### Regras:
+- Jogador só aceita mudar para um time com reputação maior que o atual (ou se estiver sem time).
+- Cada tipo de jogador ajusta seu salário final de forma diferente.
+- A negociação só ocorre se o time tiver saldo para pagar o salário.
+
+---
+
+### 📚 Exercício 2 — Sistema de Biblioteca
+
+Gerencia empréstimos de livros, controle de multas e regras de limite.
+
+#### Classes principais:
+- `Livro`
+- `Socio`
+- `Emprestimo`
+
+#### Regras:
+- Sócios com multa não podem pegar livros.
+- Máximo de 5 empréstimos simultâneos.
+- Multa de R$ 2 por dia de atraso.
+
+---
+
+### 🍽️ Exercício 3 — Sistema de Restaurante
+
+Calcula o valor final de pedidos com pratos de diferentes categorias.
+
+#### Classes principais:
+- `Prato` (abstrata)
+- Tipos: `PratoPrincipal`, `Sobremesa`
+- `Pedido` (composição de pratos)
+
+#### Regras:
+- Prato principal com acompanhamento → +20%.
+- Sobremesa:
+  - Pequeno = preço base
+  - Médio = +10%
+  - Grande = +20%
+
+---
+
+## ✅ Exemplos de Testes Unitários
+
+### 🏀 Mercado de Basquete
 
 ```java
 @Test
 public void deveCalcularSalarioFinalDoArmadorComAssistencias() {
-    // implementar
-}
-Biblioteca:
+    Armador armador = new Armador("Stephen Curry", 34, null, 9, new BigDecimal("10000"), 5);
+    BigDecimal salarioFinal = armador.calcularSalarioFinal();
 
-java
-Copy
-Edit
-@Test
-public void devePermitirEmprestimoSeNaoTemMulta() {
-    // implementar
+    // 5 assistências = +5% -> 10.000 + 5% = 10.500
+    Assert.assertEquals(new BigDecimal("10500.00"), salarioFinal);
 }
-Restaurante:
 
-java
-Copy
-Edit
-@Test
-public void deveCalcularPrecoFinalDoPratoPrincipalComAcompanhamento() {
-    // implementar
-}
