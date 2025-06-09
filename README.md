@@ -1,157 +1,122 @@
+
 # Exercícios para Fixação de Conceitos de POO
 
-Este repositório contém três exercícios para praticar os conceitos de **Herança**, **Polimorfismo**, **Composição** e **Encapsulamento** aplicados em sistemas simulados reais.
+Este repositório contém três exercícios para praticar os conceitos de Herança, Polimorfismo, Composição e Encapsulamento aplicados em sistemas simulados reais.
 
 ---
 
-## Exercício 1 — Sistema de Mercado de Basquete
+## 🏀 Exercício 1 — Sistema de Mercado de Basquete
 
 ### Descrição
 Simule o mercado de negociação de jogadores de basquete, considerando características específicas de cada tipo de jogador e regras de negócio para negociação entre times.
 
-### Classes Principais
-- **JogadorBasquete** (superclasse)
-- **Armador, Ala, Pivô** (subclasses com regras específicas)
-- **TimeBasquete**
-- **NegociacaoBasquete**
+### Classes
+- **JogadorBasquete**: classe base com nome, idade, time atual, reputação e salário base.
+- **Armador**, **Ala**, **Pivô**: subclasses com regras específicas para cálculo de salário.
+- **TimeBasquete**: representa os clubes, contendo nome, reputação e saldo disponível.
+- **NegociacaoBasquete**: executa as regras para transferências de jogadores.
 
 ### Regras de Negócio
 - Jogadores só aceitam trocar para times com reputação maior que a do atual, salvo se estiverem sem time.
-- O salário do jogador pode ser ajustado conforme o tipo e atributos do jogador.
-- O time comprador deve ter saldo suficiente para pagar o salário final do jogador.
-- Ao negociar, atualiza o time do jogador e saldo do time comprador.
+- O salário final do jogador é ajustado conforme tipo e estatísticas específicas.
+- O time comprador precisa ter saldo suficiente para pagar o salário final.
+- A negociação atualiza o time do jogador e desconta o valor do saldo do time comprador.
 
 ### Testes Obrigatórios
 - `deveCalcularSalarioFinalDoArmadorComAssistencias`
 - `naoDevePermitirNegociacaoSeSaldoInsuficiente`
 - `deveAtualizarTimeDoJogadorAoNegociar`
 
+### Exemplo de Teste
+```java
+@Test
+public void deveCalcularSalarioFinalDoArmadorComAssistencias() {
+    Armador armador = new Armador("Stephen Curry", 34, null, 9, new BigDecimal("10000"), 5);
+    BigDecimal salarioFinal = armador.calcularSalarioFinal();
+    Assert.assertEquals(new BigDecimal("10500.00"), salarioFinal);
+}
+```
+
 ---
 
-## Exercício 2 — Sistema de Biblioteca
+## 📚 Exercício 2 — Sistema de Biblioteca
 
 ### Descrição
-Gerencie empréstimos de livros para sócios, respeitando limites e multas para atrasos.
+Gerencie empréstimos de livros para sócios, respeitando limites de empréstimo simultâneo e aplicação de multas por atraso na devolução.
 
-### Classes Principais
-- **Livro**
-- **Socio**
-- **Emprestimo** (composição entre Livro e Socio)
+### Classes
+- **Livro**: título, autor, ano, exemplares disponíveis.
+- **Socio**: nome, matrícula, número de empréstimos, valor de multa.
+- **Emprestimo**: composição entre Socio e Livro.
 
 ### Regras de Negócio
-- Sócios não podem emprestar livros se tiverem multa pendente.
-- Só podem ter até 5 livros emprestados simultaneamente.
-- Multa de R$ 2 por dia em caso de atraso na devolução.
+- Sócios com multa não podem emprestar livros.
+- Sócios podem ter no máximo 5 empréstimos simultâneos.
+- Atrasos geram multa de R$ 2 por dia.
 
 ### Testes Obrigatórios
 - `devePermitirEmprestimoSeNaoTemMulta`
 - `naoDevePermitirEmprestimoSeLimiteAtingido`
 - `deveCalcularMultaCorretaParaEmprestimoAtrasado`
 
+### Exemplo de Teste
+```java
+@Test
+public void devePermitirEmprestimoSeNaoTemMulta() {
+    Livro livro = new Livro("Clean Code", "Robert C. Martin", 2008, 3);
+    Socio socio = new Socio("João", "123", 0, BigDecimal.ZERO);
+    Emprestimo emprestimo = new Emprestimo(socio, livro, LocalDate.now(), LocalDate.now().plusDays(7));
+    Assert.assertTrue(emprestimo.podeEmprestar());
+}
+```
+
 ---
 
-## Exercício 3 — Sistema de Restaurante
+## 🍽️ Exercício 3 — Sistema de Restaurante
 
 ### Descrição
-Controle pedidos em restaurante com pratos principais e sobremesas, aplicando regras de preços diferentes por tipo e características.
+Controle pedidos em restaurante com pratos principais e sobremesas, com regras específicas de preço final.
 
-### Classes Principais
-- **Prato** (classe abstrata)
-- **PratoPrincipal**, **Sobremesa** (subclasses)
-- **Pedido** (composição de vários pratos)
+### Classes
+- **Prato** (abstrata): nome e preço base.
+- **PratoPrincipal**: pode ter acompanhamento (acréscimo de 20%).
+- **Sobremesa**: tamanho afeta preço (Pequeno = base, Médio = +10%, Grande = +20%).
+- **Pedido**: composição de vários pratos, calcula o total do pedido.
 
 ### Regras de Negócio
-- PratoPrincipal com acompanhamento tem acréscimo de 20% no preço.
-- Sobremesa tem preço variável por tamanho (Pequeno, Médio, Grande).
-- Pedido soma o preço final de todos os pratos.
+- PratoPrincipal com acompanhamento custa 20% a mais.
+- Sobremesa tem variação de preço por tamanho.
+- Pedido calcula a soma dos preços finais dos pratos.
 
 ### Testes Obrigatórios
 - `deveCalcularPrecoFinalDoPratoPrincipalComAcompanhamento`
 - `deveCalcularPrecoFinalDaSobremesaGrande`
 - `deveCalcularTotalDoPedidoComMultiplosPratos`
 
----
-
-## Como Usar
-
-1. Implemente as classes seguindo as regras de cada exercício.  
-2. Crie testes unitários que validem as regras de negócio, incluindo os testes obrigatórios mencionados.  
-3. Utilize boas práticas de POO, como encapsulamento, herança, polimorfismo e composição.
-
----
-
-## Exemplos de Testes (Resumo)
-
-# 🧠 Exercícios de Fixação — POO (Herança, Polimorfismo, Encapsulamento e Composição)
-
-Este repositório contém três exercícios de fixação para praticar os conceitos de **POO**, com foco em herança, polimorfismo, encapsulamento e composição.
-
-## 📦 Exercícios
-
----
-
-### 🏀 Exercício 1 — Mercado de Basquete
-
-Simula o mercado de transferências da NBA com base em reputação, salário e estatísticas do jogador.
-
-#### Classes principais:
-- `JogadorBasquete` (classe base)
-- Tipos de jogador: `Armador`, `Ala`, `Pivô`
-- `TimeBasquete`
-- `NegociacaoBasquete`
-
-#### Regras:
-- Jogador só aceita mudar para um time com reputação maior que o atual (ou se estiver sem time).
-- Cada tipo de jogador ajusta seu salário final de forma diferente.
-- A negociação só ocorre se o time tiver saldo para pagar o salário.
-
----
-
-### 📚 Exercício 2 — Sistema de Biblioteca
-
-Gerencia empréstimos de livros, controle de multas e regras de limite.
-
-#### Classes principais:
-- `Livro`
-- `Socio`
-- `Emprestimo`
-
-#### Regras:
-- Sócios com multa não podem pegar livros.
-- Máximo de 5 empréstimos simultâneos.
-- Multa de R$ 2 por dia de atraso.
-
----
-
-### 🍽️ Exercício 3 — Sistema de Restaurante
-
-Calcula o valor final de pedidos com pratos de diferentes categorias.
-
-#### Classes principais:
-- `Prato` (abstrata)
-- Tipos: `PratoPrincipal`, `Sobremesa`
-- `Pedido` (composição de pratos)
-
-#### Regras:
-- Prato principal com acompanhamento → +20%.
-- Sobremesa:
-  - Pequeno = preço base
-  - Médio = +10%
-  - Grande = +20%
-
----
-
-## ✅ Exemplos de Testes Unitários
-
-### 🏀 Mercado de Basquete
-
+### Exemplo de Teste
 ```java
 @Test
-public void deveCalcularSalarioFinalDoArmadorComAssistencias() {
-    Armador armador = new Armador("Stephen Curry", 34, null, 9, new BigDecimal("10000"), 5);
-    BigDecimal salarioFinal = armador.calcularSalarioFinal();
-
-    // 5 assistências = +5% -> 10.000 + 5% = 10.500
-    Assert.assertEquals(new BigDecimal("10500.00"), salarioFinal);
+public void deveCalcularPrecoFinalDoPratoPrincipalComAcompanhamento() {
+    PratoPrincipal prato = new PratoPrincipal("Filé com Batata", new BigDecimal("50.00"), true);
+    BigDecimal precoFinal = prato.calcularPrecoFinal();
+    Assert.assertEquals(new BigDecimal("60.00"), precoFinal);
 }
+```
 
+---
+
+## ✅ Como Usar
+1. Implemente as classes conforme as descrições de cada exercício.
+2. Crie testes unitários cobrindo todas as regras de negócio.
+3. Aplique os conceitos de POO: encapsulamento, herança, polimorfismo e composição.
+
+---
+
+## 📎 Requisitos Técnicos
+- Linguagem sugerida: Java
+- Recomendado uso de JUnit para testes unitários.
+- Código bem estruturado, com responsabilidades separadas por classe.
+
+---
+
+**Bons estudos! 🚀**
